@@ -11,12 +11,12 @@ class HabitService:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def create_habit(self, user_id: int, payload: HabitCreate) -> Habit:
+    async def create_habit(self, user_id: int, dto: HabitCreate) -> Habit:
         habit = Habit(
             user_id=user_id,
-            name=payload.name,
-            frequency=payload.frequency,
-            target_reps=payload.target_reps,
+            name=dto.name,
+            frequency=dto.frequency,
+            target_reps=dto.target_reps,
         )
         self.db.add(habit)
         await self.db.commit()
