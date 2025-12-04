@@ -5,13 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .database import engine
 from .models.base import Base
 
-from .routes.users import router as usersRouter
+from .routes.users import router as users_router
+from .routes.habits import router as habits_router
 
 app = FastAPI(title="HabitForge")
-app.include_router(usersRouter)
-
-# CRIA AS TABELAS (só na primeira vez)
-@app.on_event("startup")
-async def startup():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+app.include_router(users_router)
+app.include_router(habits_router)

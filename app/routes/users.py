@@ -5,27 +5,26 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.schemas.user import UserCreate, UserOut
-from app.services.userService import UserService
+from app.services.user_service import UserService
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-def getUserService(db: AsyncSession = Depends(get_db)) -> UserService:
+def get_user_service(db: AsyncSession = Depends(get_db)) -> UserService:
     return UserService(db)
 
 @router.post("/", response_model=UserOut, status_code=status.HTTP_201_CREATED)
-async def createUser(
+async def create_user(
     dto: UserCreate,
-    service: UserService = Depends(getUserService)
+    service: UserService = Depends(get_user_service)
 ):
     try:
-        print(dto)
-        user = await service.createUser(dto)
+        user = await service.create_user(dto)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return user
 
 @router.get("/", response_model=List[UserOut])
-async def listUsers(
-    service: UserService = Depends(getUserService)
+async def list_users(
+    service: UserService = Depends(get_user_service)
 ):
-    return await service.listUsers()
+    return await service.list_users()

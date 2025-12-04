@@ -9,7 +9,7 @@ class UserService:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def createUser(self, dto: UserCreate) -> User:
+    async def create_user(self, dto: UserCreate) -> User:
         result = await self.db.execute(select(User).where(User.email == dto.email))
         existing = result.scalar_one_or_none()
         if existing:
@@ -24,6 +24,6 @@ class UserService:
         await self.db.refresh(user)
         return user
     
-    async def listUsers(self) -> list[User]:
+    async def list_users(self) -> list[User]:
         result = await self.db.execute(select(User))
         return result.scalars().all()
