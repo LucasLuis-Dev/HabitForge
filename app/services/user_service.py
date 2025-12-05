@@ -24,6 +24,14 @@ class UserService:
         await self.db.refresh(user)
         return user
     
+    async def get_user(self, user_id: int) -> User | None:
+        result = await self.db.execute(
+            select(User).where(
+                User.id == user_id,
+            )
+        )
+        return result.scalar_one_or_none()
+    
     async def list_users(self) -> list[User]:
         result = await self.db.execute(select(User))
         return result.scalars().all()
